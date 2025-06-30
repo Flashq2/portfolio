@@ -1,0 +1,910 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Your Name - Web Developer</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        line-height: 1.6;
+        color: #333;
+        overflow-x: hidden;
+      }
+
+      /* Animated background */
+      .animated-bg {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(-45deg, #667eea, #764ba2, #f093fb, #f5576c);
+        background-size: 400% 400%;
+        animation: gradientShift 15s ease infinite;
+        z-index: -1;
+      }
+
+      @keyframes gradientShift {
+        0% {
+          background-position: 0% 50%;
+        }
+        50% {
+          background-position: 100% 50%;
+        }
+        100% {
+          background-position: 0% 50%;
+        }
+      }
+
+      /* Navigation */
+      nav {
+        position: fixed;
+        top: 0;
+        width: 100%;
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        padding: 1rem 0;
+        z-index: 1000;
+        transition: all 0.3s ease;
+      }
+
+      nav.scrolled {
+        background: rgba(255, 255, 255, 0.95);
+        box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+      }
+
+      .nav-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0 2rem;
+      }
+
+      .logo {
+        font-size: 1.5rem;
+        font-weight: bold;
+        color: white;
+        text-decoration: none;
+        transition: all 0.3s ease;
+      }
+
+      nav.scrolled .logo {
+        color: #333;
+      }
+
+      .nav-links {
+        display: none;
+      }
+
+      /* Sections */
+      section {
+        min-height: 100vh;
+        padding: 4rem 2rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .container {
+        max-width: 1200px;
+        width: 100%;
+        margin: 0 auto;
+      }
+
+      /* Hero Section */
+      .hero {
+        text-align: center;
+        color: white;
+      }
+
+      .hero h1 {
+        font-size: 4rem;
+        margin-bottom: 1rem;
+        opacity: 0;
+        animation: fadeInUp 1s ease 0.5s forwards;
+      }
+
+      .hero .subtitle {
+        font-size: 1.5rem;
+        margin-bottom: 2rem;
+        opacity: 0;
+        animation: fadeInUp 1s ease 1s forwards;
+      }
+
+      .hero .description {
+        font-size: 1.2rem;
+        margin-bottom: 3rem;
+        opacity: 0;
+        animation: fadeInUp 1s ease 1.5s forwards;
+        max-width: 600px;
+        margin-left: auto;
+        margin-right: auto;
+      }
+
+      .cta-buttons {
+        display: flex;
+        gap: 1rem;
+        justify-content: center;
+        flex-wrap: wrap;
+        opacity: 0;
+        animation: fadeInUp 1s ease 2s forwards;
+      }
+
+      .btn {
+        padding: 1rem 2rem;
+        border: none;
+        border-radius: 50px;
+        font-size: 1.1rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        display: inline-block;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .btn-primary {
+        background: rgba(255, 255, 255, 0.2);
+        color: white;
+        border: 2px solid white;
+      }
+
+      .btn-secondary {
+        background: white;
+        color: #333;
+      }
+
+      .btn:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+      }
+
+      /* Content sections */
+      .content-section {
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(10px);
+        border-radius: 20px;
+        padding: 3rem;
+        margin: 2rem 0;
+        box-shadow: 0 10px 50px rgba(0, 0, 0, 0.1);
+        transform: translateY(50px);
+        opacity: 0;
+        transition: all 0.6s ease;
+      }
+
+      .content-section.visible {
+        transform: translateY(0);
+        opacity: 1;
+      }
+
+      .section-title {
+        font-size: 2.5rem;
+        margin-bottom: 2rem;
+        text-align: center;
+        color: #333;
+        position: relative;
+      }
+
+      .section-title::after {
+        content: "";
+        position: absolute;
+        width: 50px;
+        height: 3px;
+        background: #f5576c;
+        bottom: -10px;
+        left: 50%;
+        transform: translateX(-50%);
+      }
+
+      /* Skills Grid */
+      .skills-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 2rem;
+        margin-top: 3rem;
+      }
+
+      .skill-card {
+        background: white;
+        padding: 2rem;
+        border-radius: 15px;
+        text-align: center;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+        border: 2px solid transparent;
+      }
+
+      .skill-card:hover {
+        transform: translateY(-10px);
+        border-color: #f5576c;
+        box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+      }
+
+      .skill-icon {
+        font-size: 3rem;
+        margin-bottom: 1rem;
+        color: #f5576c;
+      }
+
+      .skill-card h3 {
+        font-size: 1.5rem;
+        margin-bottom: 1rem;
+        color: #333;
+      }
+
+      /* Projects Grid */
+      .projects-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+        gap: 2rem;
+        margin-top: 3rem;
+      }
+
+      .project-card {
+        background: white;
+        border-radius: 15px;
+        overflow: hidden;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+        cursor: pointer;
+      }
+
+      .project-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+      }
+
+      .project-image {
+        height: 200px;
+        background: linear-gradient(45deg, #667eea, #764ba2);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 3rem;
+      }
+
+      .project-content {
+        padding: 2rem;
+      }
+
+      .project-title {
+        font-size: 1.5rem;
+        margin-bottom: 1rem;
+        color: #333;
+      }
+
+      .project-tech {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        margin-top: 1rem;
+      }
+
+      .tech-tag {
+        background: #f5576c;
+        color: white;
+        padding: 0.3rem 0.8rem;
+        border-radius: 20px;
+        font-size: 0.9rem;
+      }
+
+      /* Experience Timeline */
+      .timeline {
+        position: relative;
+        margin: 3rem 0;
+      }
+
+      .timeline::before {
+        content: "";
+        position: absolute;
+        left: 50%;
+        top: 0;
+        bottom: 0;
+        width: 2px;
+        background: #f5576c;
+        transform: translateX(-50%);
+      }
+
+      .timeline-item {
+        position: relative;
+        margin: 2rem 0;
+        padding: 2rem;
+        background: white;
+        border-radius: 15px;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+        width: 45%;
+        transition: all 0.3s ease;
+      }
+
+      .timeline-item:nth-child(odd) {
+        margin-left: 0;
+      }
+
+      .timeline-item:nth-child(even) {
+        margin-left: 55%;
+      }
+
+      .timeline-item::before {
+        content: "";
+        position: absolute;
+        top: 50%;
+        width: 20px;
+        height: 20px;
+        background: #f5576c;
+        border-radius: 50%;
+        transform: translateY(-50%);
+      }
+
+      .timeline-item:nth-child(odd)::before {
+        right: -41px;
+      }
+
+      .timeline-item:nth-child(even)::before {
+        left: -41px;
+      }
+
+      .timeline-item:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+      }
+
+      /* Contact Section */
+      .contact-form {
+        max-width: 600px;
+        margin: 0 auto;
+      }
+
+      .form-group {
+        margin-bottom: 2rem;
+      }
+
+      .form-group label {
+        display: block;
+        margin-bottom: 0.5rem;
+        color: #333;
+        font-weight: bold;
+      }
+
+      .form-group input,
+      .form-group textarea {
+        width: 100%;
+        padding: 1rem;
+        border: 2px solid #ddd;
+        border-radius: 10px;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+      }
+
+      .form-group input:focus,
+      .form-group textarea:focus {
+        outline: none;
+        border-color: #f5576c;
+        box-shadow: 0 0 10px rgba(245, 87, 108, 0.3);
+      }
+
+      /* Animations */
+      @keyframes fadeInUp {
+        from {
+          opacity: 0;
+          transform: translateY(30px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes float {
+        0%,
+        100% {
+          transform: translateY(0px);
+        }
+        50% {
+          transform: translateY(-20px);
+        }
+      }
+
+      .floating {
+        animation: float 6s ease-in-out infinite;
+      }
+
+      /* Responsive */
+      @media (max-width: 768px) {
+        .hero h1 {
+          font-size: 2.5rem;
+        }
+        .hero .subtitle {
+          font-size: 1.2rem;
+        }
+        .timeline-item {
+          width: 100%;
+          margin-left: 0 !important;
+        }
+        .timeline::before {
+          left: 20px;
+        }
+        .timeline-item::before {
+          left: 10px !important;
+          right: auto !important;
+        }
+        .nav-links {
+          display: none;
+        }
+        .cta-buttons {
+          flex-direction: column;
+          align-items: center;
+        }
+      }
+
+      /* Scroll indicator */
+      .scroll-indicator {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 4px;
+        background: rgba(255, 255, 255, 0.3);
+        z-index: 9999;
+      }
+
+      .scroll-progress {
+        height: 100%;
+        background: #f5576c;
+        width: 0%;
+        transition: width 0.3s ease;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="animated-bg"></div>
+    <div class="scroll-indicator">
+      <div class="scroll-progress" id="scrollProgress"></div>
+    </div>
+
+    <nav id="navbar">
+      <div class="nav-container">
+        <a href="#home" class="logo">YourName.dev</a>
+      </div>
+    </nav>
+
+    <section id="home" class="hero">
+      <div class="container">
+        <h1>Hello, I'm Your Name</h1>
+        <p class="subtitle">Full-Stack Web Developer</p>
+        <p class="description">
+          Passionate PHP & Laravel developer with 1 year of experience building
+          robust POS and ERP systems. I create efficient, scalable web solutions
+          that drive business growth.
+        </p>
+
+        <!-- Skills Section Combined -->
+        <div class="content-section" style="margin-top: 4rem">
+          <h2 class="section-title" style="color: white">
+            Technical Skills & Experience
+          </h2>
+          <div class="skills-grid">
+            <div class="skill-card floating">
+              <div class="skill-icon">🐘</div>
+              <h3>PHP Development</h3>
+              <p>
+                1+ year experience with modern PHP, OOP principles, MVC
+                architecture, and best practices.
+              </p>
+            </div>
+            <div class="skill-card floating" style="animation-delay: 1s">
+              <div class="skill-icon">🎯</div>
+              <h3>Laravel Framework</h3>
+              <p>
+                Expert in Laravel, Eloquent ORM, Blade templating, API
+                development, and authentication systems.
+              </p>
+            </div>
+            <div class="skill-card floating" style="animation-delay: 2s">
+              <div class="skill-icon">🏪</div>
+              <h3>POS Systems</h3>
+              <p>
+                Built complete Point of Sale systems with inventory management,
+                sales tracking, and reporting.
+              </p>
+            </div>
+            <div class="skill-card floating" style="animation-delay: 3s">
+              <div class="skill-icon">📊</div>
+              <h3>ERP Solutions</h3>
+              <p>
+                Developed Enterprise Resource Planning systems for HR, finance,
+                and business process automation.
+              </p>
+            </div>
+            <div class="skill-card floating" style="animation-delay: 4s">
+              <div class="skill-icon">🗄️</div>
+              <h3>Database Management</h3>
+              <p>
+                MySQL database design, optimization, complex queries, and
+                performance tuning for business apps.
+              </p>
+            </div>
+            <div class="skill-card floating" style="animation-delay: 5s">
+              <div class="skill-icon">🎨</div>
+              <h3>Frontend Technologies</h3>
+              <p>
+                HTML5, CSS3, JavaScript, Bootstrap for responsive user
+                interfaces and interactive experiences.
+              </p>
+            </div>
+          </div>
+
+          <!-- Experience Timeline Combined -->
+          <div style="margin-top: 4rem">
+            <h3
+              style="
+                color: white;
+                text-align: center;
+                font-size: 2rem;
+                margin-bottom: 2rem;
+              "
+            >
+              Professional Journey
+            </h3>
+            <div
+              style="
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+                gap: 2rem;
+              "
+            >
+              <div class="skill-card" style="text-align: left">
+                <h3 style="color: #f5576c; margin-bottom: 0.5rem">
+                  Web Developer (2024 - Present)
+                </h3>
+                <p style="margin-bottom: 1rem">
+                  Developing and maintaining POS and ERP systems using PHP and
+                  Laravel.
+                </p>
+                <ul style="padding-left: 1.5rem; margin: 0">
+                  <li>Built complete POS system with inventory management</li>
+                  <li>Developed ERP modules for HR and finance</li>
+                  <li>Optimized database queries reducing load times by 60%</li>
+                  <li>Implemented RESTful APIs for mobile integration</li>
+                </ul>
+              </div>
+              <div class="skill-card" style="text-align: left">
+                <h3 style="color: #f5576c; margin-bottom: 0.5rem">
+                  Junior Developer (2023 - 2024)
+                </h3>
+                <p style="margin-bottom: 1rem">
+                  Started professional journey focusing on PHP and Laravel
+                  development.
+                </p>
+                <ul style="padding-left: 1.5rem; margin: 0">
+                  <li>Mastered Laravel framework and modern PHP practices</li>
+                  <li>Contributed to team projects and code reviews</li>
+                  <li>Developed responsive web interfaces</li>
+                  <li>Gained expertise in MySQL database optimization</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="cta-buttons" style="margin-top: 3rem">
+          <a href="#projects" class="btn btn-primary">View My Work</a>
+          <a href="#contact" class="btn btn-secondary">Get In Touch</a>
+        </div>
+      </div>
+    </section>
+
+    <section id="projects">
+      <div class="container">
+        <div class="content-section">
+          <h2 class="section-title">Featured Projects</h2>
+          <div class="projects-grid">
+            <div class="project-card">
+              <div class="project-image">🏪</div>
+              <div class="project-content">
+                <h3 class="project-title">Advanced POS System</h3>
+                <p>
+                  Complete point-of-sale solution with inventory management,
+                  sales reporting, and multi-user support. Features real-time
+                  stock tracking and comprehensive analytics dashboard.
+                </p>
+                <div class="project-tech">
+                  <span class="tech-tag">Laravel</span>
+                  <span class="tech-tag">PHP</span>
+                  <span class="tech-tag">MySQL</span>
+                  <span class="tech-tag">Bootstrap</span>
+                </div>
+              </div>
+            </div>
+            <div class="project-card">
+              <div class="project-image">📊</div>
+              <div class="project-content">
+                <h3 class="project-title">Business ERP Suite</h3>
+                <p>
+                  Comprehensive ERP system handling HR, finance, inventory, and
+                  customer management. Streamlines business processes with
+                  automated workflows and reporting.
+                </p>
+                <div class="project-tech">
+                  <span class="tech-tag">Laravel</span>
+                  <span class="tech-tag">PHP</span>
+                  <span class="tech-tag">MySQL</span>
+                  <span class="tech-tag">JavaScript</span>
+                </div>
+              </div>
+            </div>
+            <div class="project-card">
+              <div class="project-image">🛒</div>
+              <div class="project-content">
+                <h3 class="project-title">E-commerce Platform</h3>
+                <p>
+                  Full-featured online store with product catalog, shopping
+                  cart, payment integration, and order management system.
+                  Responsive design for mobile commerce.
+                </p>
+                <div class="project-tech">
+                  <span class="tech-tag">Laravel</span>
+                  <span class="tech-tag">PHP</span>
+                  <span class="tech-tag">MySQL</span>
+                  <span class="tech-tag">PayPal API</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="contact">
+      <div class="container">
+        <div class="content-section">
+          <h2 class="section-title">Let's Work Together</h2>
+          <p style="text-align: center; font-size: 1.2rem; margin-bottom: 3rem">
+            Ready to bring your business ideas to life? Let's discuss your next
+            project!
+          </p>
+          <form class="contact-form">
+            <div class="form-group">
+              <label for="name">Name</label>
+              <input type="text" id="name" name="name" required />
+            </div>
+            <div class="form-group">
+              <label for="email">Email</label>
+              <input type="email" id="email" name="email" required />
+            </div>
+            <div class="form-group">
+              <label for="project">Project Type</label>
+              <select
+                id="project"
+                name="project"
+                style="
+                  width: 100%;
+                  padding: 1rem;
+                  border: 2px solid #ddd;
+                  border-radius: 10px;
+                "
+              >
+                <option value="">Select a project type</option>
+                <option value="pos">POS System</option>
+                <option value="erp">ERP Solution</option>
+                <option value="ecommerce">E-commerce Site</option>
+                <option value="webapp">Web Application</option>
+                <option value="other">Other</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="message">Message</label>
+              <textarea
+                id="message"
+                name="message"
+                rows="5"
+                required
+              ></textarea>
+            </div>
+            <div style="text-align: center">
+              <button
+                type="submit"
+                class="btn btn-primary"
+                style="border: none"
+              >
+                Send Message
+              </button>
+            </div>
+          </form>
+          <div
+            style="
+              display: flex;
+              justify-content: center;
+              gap: 2rem;
+              margin-top: 3rem;
+              flex-wrap: wrap;
+            "
+          >
+            <a
+              href="mailto:your.email@example.com"
+              style="color: #f5576c; text-decoration: none; font-size: 1.1rem"
+            >
+              📧 your.email@example.com
+            </a>
+            <a
+              href="tel:+1234567890"
+              style="color: #f5576c; text-decoration: none; font-size: 1.1rem"
+            >
+              📱 +1 (234) 567-8900
+            </a>
+            <a
+              href="https://linkedin.com/in/yourprofile"
+              style="color: #f5576c; text-decoration: none; font-size: 1.1rem"
+            >
+              💼 LinkedIn
+            </a>
+            <a
+              href="https://github.com/yourusername"
+              style="color: #f5576c; text-decoration: none; font-size: 1.1rem"
+            >
+              🐙 GitHub
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <script>
+      // Smooth scrolling for navigation links
+      document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+        anchor.addEventListener("click", function (e) {
+          e.preventDefault();
+          const target = document.querySelector(this.getAttribute("href"));
+          target.scrollIntoView({
+            behavior: "smooth",
+            block: "start",
+          });
+        });
+      });
+
+      // Navbar scroll effect
+      window.addEventListener("scroll", () => {
+        const navbar = document.getElementById("navbar");
+        if (window.scrollY > 100) {
+          navbar.classList.add("scrolled");
+        } else {
+          navbar.classList.remove("scrolled");
+        }
+
+        // Update scroll progress
+        const scrollProgress = document.getElementById("scrollProgress");
+        const scrollPercent =
+          (window.scrollY /
+            (document.documentElement.scrollHeight - window.innerHeight)) *
+          100;
+        scrollProgress.style.width = scrollPercent + "%";
+      });
+
+      // Intersection Observer for animations
+      const observerOptions = {
+        threshold: 0.1,
+        rootMargin: "0px 0px -50px 0px",
+      };
+
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("visible");
+          }
+        });
+      }, observerOptions);
+
+      // Observe all content sections
+      document.querySelectorAll(".content-section").forEach((section) => {
+        observer.observe(section);
+      });
+
+      // Project card hover effects
+      document.querySelectorAll(".project-card").forEach((card) => {
+        card.addEventListener("mouseenter", function () {
+          this.style.transform = "translateY(-15px) rotateY(5deg)";
+        });
+
+        card.addEventListener("mouseleave", function () {
+          this.style.transform = "translateY(0) rotateY(0deg)";
+        });
+      });
+
+      // Contact form submission
+      document
+        .querySelector(".contact-form")
+        .addEventListener("submit", function (e) {
+          e.preventDefault();
+
+          // Simple form validation and feedback
+          const name = document.getElementById("name").value;
+          const email = document.getElementById("email").value;
+          const message = document.getElementById("message").value;
+
+          if (name && email && message) {
+            alert("Thank you for your message! I'll get back to you soon.");
+            this.reset();
+          } else {
+            alert("Please fill in all required fields.");
+          }
+        });
+
+      // Add some interactive elements
+      document.querySelectorAll(".skill-card").forEach((card, index) => {
+        card.addEventListener("mouseenter", function () {
+          this.style.transform = "translateY(-15px) scale(1.05)";
+          this.style.background = "linear-gradient(45deg, #f093fb, #f5576c)";
+          this.style.color = "white";
+        });
+
+        card.addEventListener("mouseleave", function () {
+          this.style.transform = "translateY(0) scale(1)";
+          this.style.background = "white";
+          this.style.color = "#333";
+        });
+      });
+
+      // Add typing effect to hero title
+      const heroTitle = document.querySelector(".hero h1");
+      const originalText = heroTitle.textContent;
+      heroTitle.textContent = "";
+
+      let i = 0;
+      const typeWriter = () => {
+        if (i < originalText.length) {
+          heroTitle.textContent += originalText.charAt(i);
+          i++;
+          setTimeout(typeWriter, 100);
+        }
+      };
+
+      setTimeout(typeWriter, 1000);
+
+      // Add particle effect on mouse move
+      document.addEventListener("mousemove", (e) => {
+        if (Math.random() > 0.95) {
+          createParticle(e.clientX, e.clientY);
+        }
+      });
+
+      function createParticle(x, y) {
+        const particle = document.createElement("div");
+        particle.style.position = "fixed";
+        particle.style.left = x + "px";
+        particle.style.top = y + "px";
+        particle.style.width = "4px";
+        particle.style.height = "4px";
+        particle.style.background = "#f5576c";
+        particle.style.borderRadius = "50%";
+        particle.style.pointerEvents = "none";
+        particle.style.zIndex = "9999";
+        particle.style.animation = "fadeOut 1s ease-out forwards";
+
+        document.body.appendChild(particle);
+
+        setTimeout(() => {
+          particle.remove();
+        }, 1000);
+      }
+
+      // Add fadeOut animation
+      const style = document.createElement("style");
+      style.textContent = `
+            @keyframes fadeOut {
+                0% { opacity: 1; transform: translateY(0); }
+                100% { opacity: 0; transform: translateY(-50px); }
+            }
+        `;
+      document.head.appendChild(style);
+    </script>
+  </body>
+</html>
